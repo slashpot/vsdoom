@@ -53,6 +53,15 @@ export function activate(context: vscode.ExtensionContext) {
       );
       const cfgSrc = panel.webview.asWebviewUri(cfgPath);
 
+      const utilPath = vscode.Uri.joinPath(
+        context.extensionUri,
+        "src",
+        "doom",
+        "utils",
+        "webviewUtil.js"
+      );
+      const utilSrc = panel.webview.asWebviewUri(utilPath);
+
       // Replace any instances of ${webview.cspSource} with the actual CSP source
       htmlContent = htmlContent.replace(
         /\$\{webview\.cspSource\}/g,
@@ -62,7 +71,8 @@ export function activate(context: vscode.ExtensionContext) {
       htmlContent = htmlContent
         .replace("{{jsSrc}}", jsSrc.toString())
         .replace("{{wad}}", wadSrc.toString())
-        .replace("{{cfg}}", cfgSrc.toString());
+        .replace("{{cfg}}", cfgSrc.toString())
+        .replace("{{utilSrc}}", utilSrc.toString());
 
       panel.webview.html = htmlContent;
 

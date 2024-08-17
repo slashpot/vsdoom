@@ -20,6 +20,10 @@
       {
         "command": "vsdoom.savegame",
         "title": "[VsDoom] Save Game"
+      },
+      {
+        "command": "vsdoom.loadgame",
+        "title": "[VsDoom] Load Game"
       }
     ]
   },
