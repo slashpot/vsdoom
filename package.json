@@ -15,7 +15,11 @@
     "commands": [
       {
         "command": "vsdoom.start",
-        "title": "Start Doom"
+        "title": "[VsDoom] Start Game"
+      },
+      {
+        "command": "vsdoom.savegame",
+        "title": "[VsDoom] Save Game"
       }
     ]
   },
