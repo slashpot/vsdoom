@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "vsdoom.helloWorld",
-        "title": "Hello World"
+        "command": "vsdoom.start",
+        "title": "Start Doom"
       }
     ]
   },
