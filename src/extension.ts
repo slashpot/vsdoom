@@ -4,7 +4,6 @@ import * as path from "path";
 
 export function activate(context: vscode.ExtensionContext) {
   let panel: vscode.WebviewPanel | undefined = undefined;
-
   context.subscriptions.push(
     vscode.commands.registerCommand("vsdoom.start", () => {
       // Create and show a new webview
@@ -71,18 +70,14 @@ export function activate(context: vscode.ExtensionContext) {
         message => {
             switch (message.command) {
                 case 'saveGame':
-					console.log('message', message);
                     const workspaceFolders = vscode.workspace.workspaceFolders;
                     if (!workspaceFolders) {
                         vscode.window.showErrorMessage("Working folder not found, can't save game.");
                         return;
                     }
                     const filePath = path.join(workspaceFolders[0].uri.fsPath, 'doomSave.bin');
-                    
-                    // Convert Base64 back to binary
                     const binaryData = Buffer.from(message.data, 'base64');
-					console.log('binaryData: ', binaryData);
-                    
+
                     fs.writeFile(filePath, binaryData, err => {
                         if (err) {
                             vscode.window.showErrorMessage("Failed to save the game.");
@@ -99,13 +94,11 @@ export function activate(context: vscode.ExtensionContext) {
     })
   );
 
-  // Our new command
   context.subscriptions.push(
     vscode.commands.registerCommand("vsdoom.savegame", () => {
       if (!panel) {
         return;
       }
-
       panel.webview.postMessage({ command: "save game" });
     })
   );

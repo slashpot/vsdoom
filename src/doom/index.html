@@ -62,7 +62,7 @@
       ></canvas>
     </div>
     <script>
-      var commonArgs = [
+      const commonArgs = [
         "-iwad",
         "doom1.wad",
         "-window",
@@ -159,12 +159,9 @@
             const cachePromises = files.map(async (file) => {
               console.log(`Saving files...${file}`);
 
-              const data = Module.FS.readFile(`/savefiles/${file}`, {
-                // encoding: "binary",
-              });
+              const data = Module.FS.readFile(`/savefiles/${file}`);
               const base64Data = arrayBufferToBase64(data)
 
-              // Send the Base64 string to the extension
               vscode.postMessage({
                 command: "saveGame",
                 data: base64Data,
