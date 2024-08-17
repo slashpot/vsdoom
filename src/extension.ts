@@ -66,31 +66,37 @@ export function activate(context: vscode.ExtensionContext) {
 
       panel.webview.html = htmlContent;
 
-	  panel.webview.onDidReceiveMessage(
-        message => {
-            switch (message.command) {
-                case 'saveGame':
-                    const workspaceFolders = vscode.workspace.workspaceFolders;
-                    if (!workspaceFolders) {
-                        vscode.window.showErrorMessage("Working folder not found, can't save game.");
-                        return;
-                    }
-                    const filePath = path.join(workspaceFolders[0].uri.fsPath, 'doomSave.bin');
-                    const binaryData = Buffer.from(message.data, 'base64');
+      panel.webview.onDidReceiveMessage(
+        async (message) => {
+          switch (message.command) {
+            case "saveGame":
+              const storagePath = context.globalStorageUri.fsPath;
+              if (!fs.existsSync(storagePath)) {
+                fs.mkdir(storagePath, { recursive: true }, (err) => {
+                  if (err) {
+                    vscode.window.showErrorMessage(err.message);
+                  }
+                });
+              }
 
-                    fs.writeFile(filePath, binaryData, err => {
-                        if (err) {
-                            vscode.window.showErrorMessage("Failed to save the game.");
-                        } else {
-                            vscode.window.showInformationMessage("Game saved successfully.");
-                        }
-                    });
-                    return;
-            }
+              const filePath = path.join(storagePath, message.fileName);
+              fs.writeFile(
+                filePath,
+                Buffer.from(message.data, "base64"),
+                (err) => {
+                  if (err) {
+                    vscode.window.showErrorMessage(err.message);
+                  }
+                }
+              );
+
+              vscode.window.showInformationMessage("Game saved successfully.");
+              break;
+          }
         },
         undefined,
         context.subscriptions
-    );
+      );
     })
   );
 
